@@ -8,7 +8,7 @@
 TEST(utils, bytes_into_vec_1_byte)
 {
   const std::uint64_t example = 0xAABBCCDDEEFF11;
-  const std::vector<std::uint8_t> expected = { 0xAA };
+  const std::vector<std::uint8_t> expected = { 0x11 };
   std::vector<std::uint8_t> actual;
   etfpp::BytesIntoVec(actual, example, 1);
   EXPECT_THAT(actual, ::testing::ContainerEq(expected));
@@ -17,7 +17,7 @@ TEST(utils, bytes_into_vec_1_byte)
 TEST(utils, bytes_into_vec_2_byte)
 {
   const std::uint64_t example = 0xAABBCCDDEEFF11;
-  const std::vector<std::uint8_t> expected = { 0xAA, 0xBB };
+  const std::vector<std::uint8_t> expected = { 0xFF, 0x11 };
   std::vector<std::uint8_t> actual;
   etfpp::BytesIntoVec(actual, example, 2);
   EXPECT_THAT(actual, ::testing::ContainerEq(expected));
@@ -26,7 +26,7 @@ TEST(utils, bytes_into_vec_2_byte)
 TEST(utils, bytes_into_vec_3_bytes)
 {
   const std::uint64_t example = 0xAABBCCDDEEFF11;
-  const std::vector<std::uint8_t> expected = { 0xAA, 0xBB, 0xCC };
+  const std::vector<std::uint8_t> expected = { 0xEE, 0xFF, 0x11};
   std::vector<std::uint8_t> actual;
   etfpp::BytesIntoVec(actual, example, 3);
   EXPECT_THAT(actual, ::testing::ContainerEq(expected));
@@ -35,7 +35,7 @@ TEST(utils, bytes_into_vec_3_bytes)
 TEST(utils, bytes_into_vec_4_bytes)
 {
   const std::uint64_t example = 0xAABBCCDDEEFF11;
-  const std::vector<std::uint8_t> expected = { 0xAA, 0xBB, 0xCC, 0xDD };
+  const std::vector<std::uint8_t> expected = { 0xDD, 0xEE, 0xFF, 0x11 };
   std::vector<uint8_t> actual;
   etfpp::BytesIntoVec(actual, example, 4);
   EXPECT_THAT(actual, ::testing::ContainerEq(expected));
@@ -45,7 +45,7 @@ TEST(utils, bytes_into_vec_5_bytes)
 {
   const std::uint64_t example = 0xAABBCCDDEEFF11;
   const std::vector<std::uint8_t> expected = {
-    0xAA, 0xBB, 0xCC, 0xDD, 0xEE
+    0xCC, 0xDD, 0xEE, 0xFF, 0x11
   };
 
   std::vector<uint8_t> actual;
@@ -57,7 +57,7 @@ TEST(utils, bytes_into_vec_6_bytes)
 {
   const std::uint64_t example = 0xAABBCCDDEEFF11;
   const std::vector<std::uint8_t> expected = {
-    0xAA, 0xBB, 0xCC, 0xDD, 0xEE, 0xFF
+    0xBB, 0xCC, 0xDD, 0xEE, 0xFF, 0x11
   };
 
   std::vector<uint8_t> actual;

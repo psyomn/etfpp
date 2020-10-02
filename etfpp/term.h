@@ -9,13 +9,12 @@ namespace etfpp
   class Term
   {
   public:
-    explicit Term() : mEntries({}) {}
+    explicit Term() {}
     ~Term() {}
     Term(const Term& other) = delete;
     Term(Term&& other) = delete;
     Term& operator=(Term&& other) = delete;
 
   private:
-    std::vector<TermEntry> mEntries;
   };
 }

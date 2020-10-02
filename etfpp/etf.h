@@ -8,7 +8,7 @@
 
 namespace etfpp {
   enum EtfTags {
-    EtfVersion    = 0x83,
+    Version       = 0x83,
 
     AtomCacheRef  = 0x52,
     SmallInteger  = 0x61,
@@ -42,7 +42,7 @@ namespace etfpp {
   public:
     enum Status { Success = 0, Error };
     explicit Encoder(std::ostream& stream) : mStream(stream),
-                                             mData({}) {};
+                                             mLastData({}) {};
     Encoder(const Encoder& other) = delete;
     Encoder(Encoder&& other) = delete;
     Encoder& operator=(Encoder&& other) = delete;
@@ -51,6 +51,6 @@ namespace etfpp {
     std::vector<std::uint8_t> Encode(TermEntry& entry);
   private:
     std::ostream& mStream;
-    std::vector<std::uint8_t> mData;
+    std::vector<std::uint8_t> mLastData;
   };
 }

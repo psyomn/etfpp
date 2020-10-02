@@ -3,15 +3,21 @@
 #include <cstdint>
 #include <vector>
 #include <cstddef>
+#include <memory>
 
 namespace etfpp
 {
-  class TermEntry {};
+  class TermEntry {
+  public:
+    virtual std::vector<std::uint8_t> Bytes() const { return { 0xBA, 0xDD }; };
+  };
 
   class TermEntryInteger : public TermEntry
   {
   public:
-    TermEntryInteger(std::uint64_t entry) : mEntry(entry) {};
+    explicit TermEntryInteger(std::uint64_t entry) : TermEntry(),
+                                                     mEntry(entry) {}
+    std::vector<std::uint8_t> Bytes() const override;
   private:
     std::uint64_t mEntry;
   };
@@ -19,22 +25,24 @@ namespace etfpp
   class TermEntryList : public TermEntry
   {
   public:
-    explicit TermEntryList() : mEntries({}) {}
-    TermEntryList(const TermEntryList& other) = delete;
-    TermEntryList(TermEntryList&& other) = delete;
-    TermEntryList& operator=(TermEntryList& other) = delete;
+    TermEntryList() : TermEntry(),
+                      mEntries({}) {}
 
-    void Add(TermEntry&& entry);
+    void Add(std::unique_ptr<TermEntry>&& entry);
+    std::vector<std::uint8_t> Bytes() const override;
   private:
-    std::vector<TermEntry> mEntries;
+    std::vector<std::unique_ptr<TermEntry>> mEntries;
   };
 
-  class TermEntryTuple : public TermEntry
-  {
-  public:
-    void Add(TermEntry&& entry);
-    std::vector<std::uint8_t> Bytes() const;
-  private:
-    std::vector<TermEntry> mEntries;
-  };
+  // class TermEntryTuple : public TermEntry
+  // {
+  // public:
+  //   TermEntryTuple() : TermEntry(),
+  //                      mEntries({}) {}
+
+  //   void Add(std::unique_ptr<TermEntry>&& entry);
+  //   std::vector<std::uint8_t> Bytes() const override;
+  // private:
+  //   std::vector<std::unique_ptr<TermEntry>> mEntries;
+  // };
 }

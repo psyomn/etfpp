@@ -2,8 +2,13 @@
 
 namespace etfpp {
   std::vector<std::uint8_t> Encoder::Encode(TermEntry& entry) {
-    mData.push_back(EtfVersion);
+    std::vector<std::uint8_t> ret;
+    ret.push_back(EtfTags::Version);
+    const std::vector<std::uint8_t> bytes = entry.Bytes();
+    ret.insert(ret.end(), bytes.begin(), bytes.end());
 
-    return mData;
+    mLastData = ret;
+
+    return ret;
   }
 }

@@ -7,42 +7,35 @@
 
 namespace etfpp
 {
-  class TermEntry {
+  class Byteable {
   public:
-    virtual std::vector<std::uint8_t> Bytes() const { return { 0xBA, 0xDD }; };
+    virtual std::vector<std::uint8_t> Bytes(void) const = 0;
   };
 
-  class TermEntryInteger : public TermEntry
+  class TermEntryList : public Byteable
   {
   public:
-    explicit TermEntryInteger(std::uint64_t entry) : TermEntry(),
-                                                     mEntry(entry) {}
-    std::vector<std::uint8_t> Bytes() const override;
+    void Add(std::unique_ptr<Byteable>&& entry);
+    std::vector<std::uint8_t> Bytes(void) const override;
   private:
-    std::uint64_t mEntry;
+    std::vector<std::unique_ptr<Byteable>> mEntries;
   };
 
-  class TermEntryList : public TermEntry
+  class TermEntryTuple : public Byteable
   {
   public:
-    TermEntryList() : TermEntry(),
-                      mEntries({}) {}
-
-    void Add(std::unique_ptr<TermEntry>&& entry);
-    std::vector<std::uint8_t> Bytes() const override;
+    void Add(std::unique_ptr<Byteable>&& entry);
+    std::vector<std::uint8_t> Bytes(void) const override;
   private:
-    std::vector<std::unique_ptr<TermEntry>> mEntries;
+    std::vector<std::unique_ptr<Byteable>> mEntries;
   };
 
-  // class TermEntryTuple : public TermEntry
-  // {
-  // public:
-  //   TermEntryTuple() : TermEntry(),
-  //                      mEntries({}) {}
-
-  //   void Add(std::unique_ptr<TermEntry>&& entry);
-  //   std::vector<std::uint8_t> Bytes() const override;
-  // private:
-  //   std::vector<std::unique_ptr<TermEntry>> mEntries;
-  // };
+  class TermEntryInteger : public Byteable
+  {
+  public:
+    explicit TermEntryInteger(std::int32_t value) : mEntry(value) {}
+    std::vector<std::uint8_t> Bytes(void) const override;
+  private:
+    std::int32_t mEntry;
+  };
 }

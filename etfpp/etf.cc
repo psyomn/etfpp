@@ -1,7 +1,8 @@
 #include "etf.h"
+#include "tags.h"
 
 namespace etfpp {
-  std::vector<std::uint8_t> Encoder::Encode(TermEntry& entry) {
+  std::vector<std::uint8_t> Encoder::Encode(Byteable& entry) {
     std::vector<std::uint8_t> ret;
     ret.push_back(EtfTags::Version);
     const std::vector<std::uint8_t> bytes = entry.Bytes();

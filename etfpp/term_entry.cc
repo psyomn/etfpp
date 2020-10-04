@@ -1,4 +1,5 @@
 #include "etf.h"
+#include "tags.h"
 #include "term_entry.h"
 #include "utils.h"
 
@@ -7,13 +8,12 @@
 namespace etfpp
 {
   // TermEntryList
-
-  void TermEntryList::Add(std::unique_ptr<TermEntry>&& entry)
+  void TermEntryList::Add(std::unique_ptr<Byteable>&& entry)
   {
-    mEntries.push_back(entry);
+    mEntries.push_back(std::move(entry));
   }
 
-  std::vector<std::uint8_t> TermEntryList::Bytes() const
+  std::vector<std::uint8_t> TermEntryList::Bytes(void) const
   {
     std::vector<std::uint8_t> ret;
     const std::size_t size = mEntries.size();
@@ -29,32 +29,43 @@ namespace etfpp
     ret.push_back(EtfTags::Nil);
     return ret;
   }
+}
 
-  // // TermTuple
+namespace etfpp
+{
+  // TermTuple
+  void TermEntryTuple::Add(std::unique_ptr<Byteable>&& entry)
+  {
+    mEntries.push_back(std::move(entry));
+  }
 
-  // void TermEntryTuple::Add(std::unique_ptr<TermEntry>&& entry)
-  // {
-  //   mEntries.push_back((entry));
-  // }
+  std::vector<std::uint8_t> TermEntryTuple::Bytes(void) const
+  {
+    std::vector<std::uint8_t> ret;
 
-  // std::vector<std::uint8_t> TermEntryTuple::Bytes() const
-  // {
-  //   std::vector<std::uint8_t> ret;
+    const std::size_t size = mEntries.size();
+    if (size < 255) {
+      ret.push_back(EtfTags::SmallTuple);
+      ret.push_back(size & 0xff);
+    } else {
+      ret.push_back(EtfTags::LargeTuple);
+      BytesIntoVec(ret, std::uint64_t(size), 4);
+    }
 
-  //   const std::size_t size = mEntries.size();
-  //   if (size < 255) {
-  //     ret.push_back(EtfTags::SmallTuple);
-  //     ret.push_back(size & 0xff);
-  //   } else {
-  //     ret.push_back(EtfTags::LargeTuple);
-  //     BytesIntoVec(ret, std::uint64_t(size), 4);
-  //   }
+    for (const auto& e : mEntries) {
+      const std::vector<std::uint8_t> bytes = e->Bytes();
+      ret.insert(ret.end(), bytes.begin(), bytes.end());
+    }
 
-  //   for (const auto& e : mEntries) {
-  //     const std::vector<std::uint8_t> bytes = e.Bytes();
-  //     ret.insert(ret.end(), bytes.begin(), bytes.end());
-  //   }
+    return ret;
+  }
+}
 
-  //   return ret;
-  // }
+namespace etfpp
+{
+  std::vector<std::uint8_t> TermEntryInteger::Bytes(void) const
+  {
+    std::vector<std::uint8_t> ret;
+    return ret;
+  }
 }

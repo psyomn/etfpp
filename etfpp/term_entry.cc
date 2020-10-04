@@ -65,7 +65,8 @@ namespace etfpp
 {
   std::vector<std::uint8_t> TermEntryInteger::Bytes(void) const
   {
-    std::vector<std::uint8_t> ret;
+    std::vector<std::uint8_t> ret = { EtfTags::Integer };
+    BytesIntoVec(ret, std::uint64_t(mEntry), 4);
     return ret;
   }
 }

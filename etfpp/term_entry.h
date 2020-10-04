@@ -12,7 +12,8 @@ namespace etfpp
     virtual std::vector<std::uint8_t> Bytes(void) const = 0;
   };
 
-  class TermEntryList : public Byteable
+
+  class List : public Byteable
   {
   public:
     void Add(std::unique_ptr<Byteable>&& entry);
@@ -21,7 +22,8 @@ namespace etfpp
     std::vector<std::unique_ptr<Byteable>> mEntries;
   };
 
-  class TermEntryTuple : public Byteable
+
+  class Tuple : public Byteable
   {
   public:
     void Add(std::unique_ptr<Byteable>&& entry);
@@ -30,10 +32,21 @@ namespace etfpp
     std::vector<std::unique_ptr<Byteable>> mEntries;
   };
 
-  class TermEntryInteger : public Byteable
+
+  class SmallInteger : public Byteable
   {
   public:
-    explicit TermEntryInteger(std::int32_t value) : mEntry(value) {}
+    explicit SmallInteger(std::uint8_t value) : mEntry(value) {}
+    std::vector<std::uint8_t> Bytes(void) const override;
+  private:
+    std::uint8_t mEntry;
+  };
+
+
+  class Integer : public Byteable
+  {
+  public:
+    explicit Integer(std::int32_t value) : mEntry(value) {}
     std::vector<std::uint8_t> Bytes(void) const override;
   private:
     std::int32_t mEntry;

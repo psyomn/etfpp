@@ -10,39 +10,39 @@ namespace etfpp
     if (mType == std::nullopt)
       throw std::runtime_error("can't encode unset type");
 
-    // TODO: find better name than EtfTags
+    // TODO: find better name than tag
     switch (mType.value()) {
-    case EtfTags::Version: break;
-    case EtfTags::AtomCacheRef: break;
-    case EtfTags::SmallInteger: break;
-    case EtfTags::Integer: break;
-    case EtfTags::Float: break;
-    case EtfTags::Atom: break;
-    case EtfTags::Reference: break;
-    case EtfTags::Port: break;
-    case EtfTags::Pid: break;
+    case tag::Version: break;
+    case tag::AtomCacheRef: break;
+    case tag::SmallInteger: break;
+    case tag::Integer: break;
+    case tag::Float: break;
+    case tag::Atom: break;
+    case tag::Reference: break;
+    case tag::Port: break;
+    case tag::Pid: break;
 
-    case EtfTags::SmallTuple:
-    case EtfTags::LargeTuple:
+    case tag::SmallTuple:
+    case tag::LargeTuple:
       EncodeTuple();
       break;
 
-    case EtfTags::Map: break;
-    case EtfTags::Nil: break;
-    case EtfTags::String: break;
-    case EtfTags::List: break;
-    case EtfTags::Binary: break;
-    case EtfTags::SmallBig: break;
-    case EtfTags::LargeBig: break;
-    case EtfTags::NewReference: break;
-    case EtfTags::SmallAtom: break;
-    case EtfTags::Fun: break;
-    case EtfTags::NewFun: break;
-    case EtfTags::Export: break;
-    case EtfTags::BitBinary: break;
-    case EtfTags::NewFloat: break;
-    case EtfTags::AtomUtf8: break;
-    case EtfTags::SmallAtomUtf8: break;
+    case tag::Map: break;
+    case tag::Nil: break;
+    case tag::String: break;
+    case tag::List: break;
+    case tag::Binary: break;
+    case tag::SmallBig: break;
+    case tag::LargeBig: break;
+    case tag::NewReference: break;
+    case tag::SmallAtom: break;
+    case tag::Fun: break;
+    case tag::NewFun: break;
+    case tag::Export: break;
+    case tag::BitBinary: break;
+    case tag::NewFloat: break;
+    case tag::AtomUtf8: break;
+    case tag::SmallAtomUtf8: break;
     default:
       throw std::runtime_error("can't encode unknown type");
     }

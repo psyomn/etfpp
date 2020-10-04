@@ -23,10 +23,10 @@ namespace etfpp
     ~Term() {}
 
     std::vector<u8> Bytes() const;
-    inline void Type(enum EtfTags type) { mType = type; }
+    inline void Type(std::uint8_t type) { mType = type; }
 
   private:
-    std::optional<enum EtfTags> mType;
+    std::optional<std::uint8_t> mType;
     std::vector<Term> mTerms;
     std::uint64_t mInteger;
     double mFloat;

@@ -7,7 +7,7 @@
 
 TEST(encoder, encode_positive_integer)
 {
-  etfpp::TermEntryInteger tei(1);
+  etfpp::Integer tei(1);
   auto actual = tei.Bytes();
   auto expected = std::vector<uint8_t>({
       0x62, 0x00, 0x00, 0x00, 0x01
@@ -17,7 +17,7 @@ TEST(encoder, encode_positive_integer)
 
 TEST(encoder, encode_max_32_bit_signed_integer)
 {
-  etfpp::TermEntryInteger tei(~std::int32_t(0));
+  etfpp::Integer tei(~std::int32_t(0));
   auto actual = tei.Bytes();
   auto expected = std::vector<uint8_t>({
       0x62, 0xff, 0xff, 0xff, 0xff
@@ -27,7 +27,7 @@ TEST(encoder, encode_max_32_bit_signed_integer)
 
 TEST(encoder, encode_nothingness)
 {
-  etfpp::TermEntryInteger tei(std::uint32_t(0));
+  etfpp::Integer tei(std::uint32_t(0));
   auto actual = tei.Bytes();
   auto expected = std::vector<uint8_t>({
       0x62, 0x00, 0x00, 0x00, 0x00
@@ -37,7 +37,7 @@ TEST(encoder, encode_nothingness)
 
 TEST(encoder, encode_negative_integer)
 {
-  etfpp::TermEntryInteger tei(-1);
+  etfpp::Integer tei(-1);
   auto actual = tei.Bytes();
   auto expected = std::vector<uint8_t>({
       0x62, 0xff, 0xff, 0xff, 0xff

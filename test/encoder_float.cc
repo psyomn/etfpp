@@ -10,10 +10,12 @@
 
 TEST(encoder, encode_zero_float)
 {
+  using namespace std::string_literals;
+
   etfpp::Float flt(0.0);
   auto actual = flt.Bytes();
 
-  const std::string expected = "c0.00000000000000000000e+00";
+  const std::string expected = "c0.00000000000000000000e+00\0\0\0\0\0"s;
   const std::string str = etfpp::BytesIntoString(actual);
 
   ASSERT_EQ(str, expected);
@@ -21,10 +23,12 @@ TEST(encoder, encode_zero_float)
 
 TEST(encoder, encode_simple_float)
 {
+  using namespace std::string_literals;
+
   etfpp::Float flt(123.123123321);
   auto actual = flt.Bytes();
 
-  const std::string expected = "c1.23123123320999994235e+02";
+  const std::string expected = "c1.23123123320999994235e+02\0\0\0\0\0"s;
   const std::string str = etfpp::BytesIntoString(actual);
 
   ASSERT_EQ(str, expected);
@@ -32,10 +36,12 @@ TEST(encoder, encode_simple_float)
 
 TEST(encoder, encode_bigger_float)
 {
+  using namespace std::string_literals;
+
   etfpp::Float flt(1000000000000.123123123);
   auto actual = flt.Bytes();
 
-  const std::string expected = "c1.00000000000012316895e+12";
+  const std::string expected = "c1.00000000000012316895e+12\0\0\0\0\0"s;
   const std::string str = etfpp::BytesIntoString(actual);
 
   ASSERT_EQ(str, expected);

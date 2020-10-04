@@ -4,6 +4,7 @@
 #include <vector>
 #include <cstddef>
 #include <memory>
+#include <string>
 
 namespace etfpp
 {
@@ -61,5 +62,18 @@ namespace etfpp
     std::vector<std::uint8_t> Bytes(void) const override;
   private:
     double mEntry;
+  };
+
+
+  class String : public Byteable
+  {
+  public:
+    explicit String(std::string value) : mEntry(value) {}
+    ~String() {}
+
+    std::vector<std::uint8_t> Bytes(void) const override;
+  private:
+    static const std::size_t mMaxSize = 0xffff;
+    std::string mEntry;
   };
 }

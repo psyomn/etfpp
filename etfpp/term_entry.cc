@@ -61,7 +61,6 @@ namespace etfpp
   }
 }
 
-
 namespace etfpp
 {
   std::vector<std::uint8_t> SmallInteger::Bytes(void) const
@@ -69,7 +68,6 @@ namespace etfpp
     return std::vector<std::uint8_t>({ tag::SmallInteger, mEntry });
   }
 }
-
 
 namespace etfpp
 {
@@ -101,6 +99,23 @@ namespace etfpp
 
     for (std::size_t i = 0; i < buffsize - 1; ++i)
       ret.push_back(std::uint8_t(buffer[i]));
+
+    return ret;
+  }
+}
+
+namespace etfpp
+{
+  std::vector<std::uint8_t> String::Bytes(void) const
+  {
+    std::vector<std::uint8_t> ret = { tag::String };
+
+    // TODO: constructor probably should throw instead
+    if (mEntry.size() > mMaxSize)
+      throw std::runtime_error("can not encode strings larger than 65535 bytes");
+
+    const std::size_t size = mEntry.size();
+    BytesIntoVec(ret, size, 2);
 
     return ret;
   }

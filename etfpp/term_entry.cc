@@ -117,6 +117,9 @@ namespace etfpp
     const std::size_t size = mEntry.size();
     BytesIntoVec(ret, size, 2);
 
+    std::copy(mEntry.begin(), mEntry.end(),
+              std::back_inserter(ret));
+
     return ret;
   }
 }

@@ -70,10 +70,20 @@ namespace etfpp
   public:
     explicit String(std::string value) : mEntry(value) {}
     ~String() {}
-
     std::vector<std::uint8_t> Bytes(void) const override;
   private:
     static const std::size_t mMaxSize = 0xffff;
     std::string mEntry;
+  };
+
+
+  class Binary : public Byteable
+  {
+  public:
+    explicit Binary(std::vector<std::uint8_t> data) : mData(data) {}
+    ~Binary() {}
+    std::vector<std::uint8_t> Bytes(void) const override;
+  private:
+    std::vector<std::uint8_t> mData;
   };
 }

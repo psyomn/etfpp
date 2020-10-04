@@ -3,11 +3,12 @@
 #include "term_entry.h"
 #include "utils.h"
 
+#include <cmath>
 #include <iostream>
+#include <limits>
 
 namespace etfpp
 {
-  // List
   void List::Add(std::unique_ptr<Byteable>&& entry)
   {
     mEntries.push_back(std::move(entry));
@@ -33,7 +34,6 @@ namespace etfpp
 
 namespace etfpp
 {
-  // TermTuple
   void Tuple::Add(std::unique_ptr<Byteable>&& entry)
   {
     mEntries.push_back(std::move(entry));
@@ -77,6 +77,31 @@ namespace etfpp
   {
     std::vector<std::uint8_t> ret = { tag::Integer };
     BytesIntoVec(ret, std::uint64_t(mEntry), 4);
+    return ret;
+  }
+}
+
+namespace etfpp
+{
+  std::vector<std::uint8_t> Float::Bytes(void) const
+  {
+    if (mEntry != mEntry)
+      throw std::runtime_error("can't encode NaN");
+
+    if (mEntry == std::numeric_limits<double>::infinity())
+      throw std::runtime_error("can't encode Inf");
+
+    std::vector<std::uint8_t> ret = { tag::Float };
+
+    constexpr std::size_t buffsize = 32;
+    char buffer[buffsize] = {0};
+
+    if (snprintf(buffer, buffsize - 1, "%.20e", mEntry) < 0)
+      throw std::runtime_error("could not format buffer");
+
+    for (std::size_t i = 0; i < buffsize - 1; ++i)
+      ret.push_back(std::uint8_t(buffer[i]));
+
     return ret;
   }
 }

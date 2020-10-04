@@ -51,4 +51,15 @@ namespace etfpp
   private:
     std::int32_t mEntry;
   };
+
+
+  class Float : public Byteable
+  {
+  public:
+    explicit Float(double value) : mEntry(value) {}
+    ~Float() {}
+    std::vector<std::uint8_t> Bytes(void) const override;
+  private:
+    double mEntry;
+  };
 }

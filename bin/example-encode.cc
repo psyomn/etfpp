@@ -15,7 +15,7 @@ int main(void) {
     return ss.str();
   };
 
-  {
+  { // [{}]
     std::ofstream file;
     file.open(MakeNameFn(counter++), std::ios_base::binary);
 
@@ -26,9 +26,25 @@ int main(void) {
     std::stringstream ss;
     etfpp::Encoder encoder(ss);
     const std::vector<std::uint8_t> bytes = encoder.Encode(list);
-    for (const auto& b : bytes) {
-      file << b;
-    }
+
+    for (const auto& b : bytes) file << b;
+
+    file.close();
+  }
+
+  { // [123.123]
+    std::ofstream file;
+    file.open(MakeNameFn(counter++), std::ios_base::binary);
+
+    etfpp::List list;
+    std::unique_ptr<etfpp::Byteable> flt(new etfpp::Float(123.123));
+    list.Add(std::move(flt));
+
+    std::stringstream ss;
+    etfpp::Encoder encoder(ss);
+    const std::vector<std::uint8_t> bytes = encoder.Encode(list);
+
+    for (const auto& b : bytes) file << b;
 
     file.close();
   }

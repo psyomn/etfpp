@@ -1,5 +1,6 @@
 #include "utils.h"
 
+#include <sstream>
 #include <stdexcept>
 
 namespace etfpp {
@@ -17,5 +18,12 @@ namespace etfpp {
     default:
       throw std::runtime_error("can only do up to 8 bytes");
     }
+  }
+
+  std::string BytesIntoString(const std::vector<uint8_t>& bytes)
+  {
+    std::stringstream ss;
+    for (const auto& b: bytes) ss << b;
+    return ss.str();
   }
 }

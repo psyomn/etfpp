@@ -139,10 +139,26 @@ namespace etfpp
 namespace etfpp
 {
   std::vector<std::uint8_t> Atom::Bytes(void) const {
+    // TODO check for max bounds here
     std::vector<std::uint8_t> ret = { tag::Atom };
     const std::size_t size = mName.size();
     BytesIntoVec(ret, size, 2);
     ret.insert(ret.end(), mName.begin(), mName.end());
+    return ret;
+  }
+}
+
+namespace etfpp
+{
+  std::vector<std::uint8_t> SmallAtom::Bytes(void) const {
+    // TODO check for max bounds here
+    std::vector<std::uint8_t> ret = { tag::SmallAtom };
+    const std::size_t size = mName.size();
+    BytesIntoVec(ret, size, 1);
+
+    for (const auto& b : mName)
+      ret.push_back(static_cast<std::uint8_t>(b));
+
     return ret;
   }
 }

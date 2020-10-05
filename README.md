@@ -38,6 +38,10 @@ A simple C++ library that helps you build and encode Erlang structures
     bazel build ...
     bazel test ...
 
+If you want to run a quick check (bazel build is a prereq):
+
+    ./tools/run_codec.sh
+
 ## testing
 
 You'll notice I hand craft some of the binary payloads. That's

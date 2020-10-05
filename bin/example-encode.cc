@@ -88,11 +88,15 @@ int main(void) {
     unique_ptr<etfpp::Integer> two = std::make_unique<etfpp::Integer>(2);
     unique_ptr<etfpp::Integer> three = std::make_unique<etfpp::Integer>(3);
 
+    const std::vector<std::uint8_t> vec = {'h', 'e', 'l', 'l', 'o'};
+    unique_ptr<etfpp::Binary> bin = std::make_unique<etfpp::Binary>(vec);
+
     unique_ptr<etfpp::Byteable> flt(new etfpp::Float(123.123));
 
     tuple->Add(std::move(one));
     tuple->Add(std::move(two));
     tuple->Add(std::move(three));
+    tuple->Add(std::move(bin));
 
     unique_ptr<etfpp::Byteable> tupbyte(tuple.release());
     list.Add(std::move(tupbyte));

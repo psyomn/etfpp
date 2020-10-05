@@ -9,6 +9,9 @@
 int main(void) {
   int counter = 0;
 
+  // TODO: refine API and make the ofstream param in encoder actually
+  //   useful.
+
   auto MakeNameFn = [](int num) -> std::string {
     std::stringstream ss;
     ss << "file-" << num << ".etf";
@@ -39,6 +42,60 @@ int main(void) {
     etfpp::List list;
     std::unique_ptr<etfpp::Byteable> flt(new etfpp::Float(123.123));
     list.Add(std::move(flt));
+
+    std::stringstream ss;
+    etfpp::Encoder encoder(ss);
+    const std::vector<std::uint8_t> bytes = encoder.Encode(list);
+
+    for (const auto& b : bytes) file << b;
+
+    file.close();
+  }
+
+  { // [<<"hello world">>]
+    std::ofstream file;
+    file.open(MakeNameFn(counter++), std::ios_base::binary);
+
+    std::vector<std::uint8_t> data;
+    const std::string example = "hello world this is a binary";
+
+    std::copy(example.begin(), example.end(),
+              std::back_inserter(data));
+
+    etfpp::List list;
+    std::unique_ptr<etfpp::Byteable> bin(new etfpp::Binary(data));
+    list.Add(std::move(bin));
+
+    std::stringstream ss;
+    etfpp::Encoder encoder(ss);
+    const std::vector<std::uint8_t> bytes = encoder.Encode(list);
+
+    for (const auto& b : bytes) file << b;
+
+    file.close();
+  }
+
+  { // [{1,2,3, 123.123, <<"hello">>}]
+    using std::unique_ptr;
+
+    std::ofstream file;
+    file.open(MakeNameFn(counter++), std::ios_base::binary);
+
+    etfpp::List list;
+    unique_ptr<etfpp::Tuple> tuple(new etfpp::Tuple());
+
+    unique_ptr<etfpp::Integer> one = std::make_unique<etfpp::Integer>(1);
+    unique_ptr<etfpp::Integer> two = std::make_unique<etfpp::Integer>(2);
+    unique_ptr<etfpp::Integer> three = std::make_unique<etfpp::Integer>(3);
+
+    unique_ptr<etfpp::Byteable> flt(new etfpp::Float(123.123));
+
+    tuple->Add(std::move(one));
+    tuple->Add(std::move(two));
+    tuple->Add(std::move(three));
+
+    unique_ptr<etfpp::Byteable> tupbyte(tuple.release());
+    list.Add(std::move(tupbyte));
 
     std::stringstream ss;
     etfpp::Encoder encoder(ss);

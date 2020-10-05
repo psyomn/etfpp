@@ -12,6 +12,9 @@ int main(void) {
   // TODO: refine API and make the ofstream param in encoder actually
   //   useful.
 
+  // TODO: in the future, planning to do a builder pattern to work on
+  //   this.
+
   auto MakeNameFn = [](int num) -> std::string {
     std::stringstream ss;
     ss << "file-" << num << ".etf";
@@ -31,7 +34,6 @@ int main(void) {
     const std::vector<std::uint8_t> bytes = encoder.Encode(list);
 
     for (const auto& b : bytes) file << b;
-
     file.close();
   }
 
@@ -48,7 +50,6 @@ int main(void) {
     const std::vector<std::uint8_t> bytes = encoder.Encode(list);
 
     for (const auto& b : bytes) file << b;
-
     file.close();
   }
 
@@ -71,7 +72,6 @@ int main(void) {
     const std::vector<std::uint8_t> bytes = encoder.Encode(list);
 
     for (const auto& b : bytes) file << b;
-
     file.close();
   }
 
@@ -106,7 +106,33 @@ int main(void) {
     const std::vector<std::uint8_t> bytes = encoder.Encode(list);
 
     for (const auto& b : bytes) file << b;
+    file.close();
+  }
 
+  { // [one, two, three, ÿapple]
+    using std::unique_ptr;
+
+    std::ofstream file;
+    file.open(MakeNameFn(counter++), std::ios_base::binary);
+
+    etfpp::List list;
+
+    unique_ptr<etfpp::Atom>
+      one = std::make_unique<etfpp::Atom>("one"),
+      two = std::make_unique<etfpp::Atom>("two"),
+      three = std::make_unique<etfpp::Atom>("three"),
+      four = std::make_unique<etfpp::Atom>("\xFF""apple");
+
+    list.Add(std::move(one));
+    list.Add(std::move(two));
+    list.Add(std::move(three));
+    list.Add(std::move(four));
+
+    std::stringstream ss;
+    etfpp::Encoder encoder(ss);
+    const std::vector<std::uint8_t> bytes = encoder.Encode(list);
+
+    for (const auto& b : bytes) file << b;
     file.close();
   }
 

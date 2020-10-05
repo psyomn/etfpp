@@ -14,6 +14,16 @@ namespace etfpp
   };
 
 
+  class Atom : public Byteable
+  {
+  public:
+    explicit Atom(std::string name) : mName(name) {}
+    std::vector<std::uint8_t> Bytes(void) const override;
+  private:
+    std::string mName;
+  };
+
+
   class List : public Byteable
   {
   public:

@@ -135,3 +135,14 @@ namespace etfpp
     return ret;
   }
 }
+
+namespace etfpp
+{
+  std::vector<std::uint8_t> Atom::Bytes(void) const {
+    std::vector<std::uint8_t> ret = { tag::Atom };
+    const std::size_t size = mName.size();
+    BytesIntoVec(ret, size, 2);
+    ret.insert(ret.end(), mName.begin(), mName.end());
+    return ret;
+  }
+}

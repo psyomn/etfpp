@@ -159,5 +159,32 @@ int main(void) {
     file.close();
   }
 
+  {
+    using std::unique_ptr;
+
+    std::ofstream file;
+    file.open(MakeNameFn(counter++), std::ios_base::binary);
+
+    const std::vector<std::uint8_t> name = {
+      0xe1, 0xbc, 0x80, 0xce, 0xbc, 0xce,
+      0xbc, 0xce, 0xbf, 0xcf, 0x85, 0xce,
+      0xb4, 0xce, 0xb9, 0xe1, 0xbd, 0xb2,
+      0xcf, 0x82,
+    };
+
+    unique_ptr<etfpp::AtomUtf8> atom =
+      std::make_unique<etfpp::AtomUtf8>(name);
+
+    etfpp::List list;
+    list.Add(std::move(atom));
+
+    std::stringstream ss;
+    etfpp::Encoder encoder(ss);
+    std::vector<std::uint8_t> bytes = encoder.Encode(list);
+
+    for (const auto& b : bytes) file << b;
+    file.close();
+  }
+
   return 0;
 }

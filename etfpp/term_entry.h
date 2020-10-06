@@ -34,6 +34,17 @@ namespace etfpp
   };
 
 
+  class AtomUtf8 : public Byteable
+  {
+  public:
+    explicit AtomUtf8(std::vector<std::uint8_t> name) : mName(name) {}
+    ~AtomUtf8() {}
+    std::vector<std::uint8_t> Bytes(void) const override;
+  private:
+    std::vector<std::uint8_t> mName;
+  };
+
+
   class List : public Byteable
   {
   public:

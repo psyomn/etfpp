@@ -177,3 +177,15 @@ namespace etfpp
     return ret;
   }
 }
+
+namespace etfpp
+{
+  std::vector<std::uint8_t> AtomUtf8::Bytes(void) const
+  {
+    std::vector<std::uint8_t> ret = { tag::AtomUtf8 };
+    const std::size_t size = mName.size();
+    BytesIntoVec(ret, size, 2);
+    ret.insert(ret.end(), mName.begin(), mName.end());
+    return ret;
+  }
+}

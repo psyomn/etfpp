@@ -138,7 +138,8 @@ namespace etfpp
 
 namespace etfpp
 {
-  std::vector<std::uint8_t> Atom::Bytes(void) const {
+  std::vector<std::uint8_t> Atom::Bytes(void) const
+  {
     // TODO check for max bounds here
     std::vector<std::uint8_t> ret = { tag::Atom };
     const std::size_t size = mName.size();
@@ -150,7 +151,8 @@ namespace etfpp
 
 namespace etfpp
 {
-  std::vector<std::uint8_t> SmallAtom::Bytes(void) const {
+  std::vector<std::uint8_t> SmallAtom::Bytes(void) const
+  {
     // TODO check for max bounds here
     std::vector<std::uint8_t> ret = { tag::SmallAtom };
     const std::size_t size = mName.size();
@@ -159,6 +161,19 @@ namespace etfpp
     for (const auto& b : mName)
       ret.push_back(static_cast<std::uint8_t>(b));
 
+    return ret;
+  }
+}
+
+namespace etfpp
+{
+  std::vector<std::uint8_t> BitBinary::Bytes(void) const
+  {
+    std::vector<std::uint8_t> ret = { tag::BitBinary };
+    const std::size_t size = mData.size();
+    BytesIntoVec(ret, size, 4);
+    ret.push_back(mBits);
+    ret.insert(ret.end(), mData.begin(), mData.end());
     return ret;
   }
 }

@@ -136,5 +136,28 @@ int main(void) {
     file.close();
   }
 
+  { // bitbinary example
+    using std::unique_ptr;
+
+    std::ofstream file;
+    file.open(MakeNameFn(counter++), std::ios_base::binary);
+
+    const std::vector<std::uint8_t> data = { 0xaa, 0xbb, 0xcc, 0xdd };
+    const std::uint8_t bits = 0x07;
+
+    etfpp::List list;
+    unique_ptr<etfpp::BitBinary> bitbinary =
+      std::make_unique<etfpp::BitBinary>(data, bits);
+
+    list.Add(std::move(bitbinary));
+
+    std::stringstream ss;
+    etfpp::Encoder encoder(ss);
+    std::vector<std::uint8_t> bytes = encoder.Encode(list);
+
+    for (const auto& b : bytes) file << b;
+    file.close();
+  }
+
   return 0;
 }

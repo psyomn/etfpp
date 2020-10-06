@@ -106,4 +106,18 @@ namespace etfpp
   private:
     std::vector<std::uint8_t> mData;
   };
+
+
+  class BitBinary : public Byteable
+  {
+  public:
+    BitBinary(std::vector<std::uint8_t> data,
+              std::uint8_t bits) :
+      mData(data), mBits(bits) {}
+    ~BitBinary() {}
+    std::vector<std::uint8_t> Bytes(void) const override;
+  private:
+    std::vector<std::uint8_t> mData;
+    std::uint8_t mBits;
+  };
 }

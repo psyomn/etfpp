@@ -52,3 +52,7 @@ but I sleep with one eye open so...)
 
 - [ ] Add a builder to make usage of lib a little more ergonomic
 - [ ] Write extern C stuff to make it C portable
+
+# licensing
+
+Apache v2. See LICENSE.

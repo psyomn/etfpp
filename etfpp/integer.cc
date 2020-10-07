@@ -13,10 +13,16 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 */
-#include "etf.h"
+#include "integer.h"
 #include "tags.h"
-#include "term_entry.h"
+#include "utils.h"
 
-#include <cmath>
-#include <iostream>
-#include <limits>
+namespace etfpp
+{
+  std::vector<std::uint8_t> Integer::Bytes(void) const
+  {
+    std::vector<std::uint8_t> ret = { tag::Integer };
+    BytesIntoVec(ret, std::uint64_t(mEntry), 4);
+    return ret;
+  }
+}

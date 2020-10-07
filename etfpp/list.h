@@ -13,10 +13,22 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 */
-#include "etf.h"
-#include "tags.h"
-#include "term_entry.h"
+#pragma once
 
-#include <cmath>
-#include <iostream>
-#include <limits>
+#include "byteable.h"
+
+#include <cstdint>
+#include <memory>
+#include <vector>
+
+namespace etfpp
+{
+  class List : public Byteable
+  {
+  public:
+    void Add(std::unique_ptr<Byteable>&& entry);
+    std::vector<std::uint8_t> Bytes(void) const override;
+  private:
+    std::vector<std::unique_ptr<Byteable>> mEntries;
+  };
+}

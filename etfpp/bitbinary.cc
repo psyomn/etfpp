@@ -13,10 +13,19 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 */
-#include "etf.h"
+#include "bitbinary.h"
+#include "utils.h"
 #include "tags.h"
-#include "term_entry.h"
 
-#include <cmath>
-#include <iostream>
-#include <limits>
+namespace etfpp
+{
+  std::vector<std::uint8_t> BitBinary::Bytes(void) const
+  {
+    std::vector<std::uint8_t> ret = { tag::BitBinary };
+    const std::size_t size = mData.size();
+    BytesIntoVec(ret, size, 4);
+    ret.push_back(mBits);
+    ret.insert(ret.end(), mData.begin(), mData.end());
+    return ret;
+  }
+}

@@ -12,11 +12,19 @@
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and
    limitations under the License.
-*/
-#include "etf.h"
-#include "tags.h"
-#include "term_entry.h"
+ */
+#pragma once
 
-#include <cmath>
-#include <iostream>
-#include <limits>
+#include "byteable.h"
+
+namespace etfpp
+{
+  class Integer : public Byteable
+  {
+  public:
+    explicit Integer(std::int32_t value) : mEntry(value) {}
+    std::vector<std::uint8_t> Bytes(void) const override;
+  private:
+    std::int32_t mEntry;
+  };
+}

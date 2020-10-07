@@ -13,10 +13,22 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 */
-#include "etf.h"
-#include "tags.h"
-#include "term_entry.h"
+#pragma once
 
-#include <cmath>
-#include <iostream>
-#include <limits>
+#include <cstdint>
+#include <string>
+#include <vector>
+
+#include "byteable.h"
+
+namespace etfpp
+{
+  class Atom : public Byteable
+  {
+  public:
+    explicit Atom(std::string name) : mName(name) {}
+    std::vector<std::uint8_t> Bytes(void) const override;
+  private:
+    std::string mName;
+  };
+}

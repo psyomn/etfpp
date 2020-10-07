@@ -16,6 +16,7 @@
 #pragma once
 
 #include "term_entry.h"
+#include "byteable.h"
 
 #include <ostream>
 #include <vector>

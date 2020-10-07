@@ -16,7 +16,7 @@
 #include "gtest/gtest.h"
 #include "gmock/gmock.h"
 
-#include "etfpp/term_entry.h"
+#include "etfpp/binary.h"
 
 TEST(encoder, simple_binary)
 {

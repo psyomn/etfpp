@@ -16,9 +16,9 @@
 #include "gtest/gtest.h"
 #include "gmock/gmock.h"
 
-#include "etfpp/tags.h"
-#include "etfpp/term_entry.h"
 #include "etfpp/etf.h"
+#include "etfpp/integer.h"
+#include "etfpp/tags.h"
 
 TEST(encoder, encode_positive_integer)
 {

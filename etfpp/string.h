@@ -12,11 +12,23 @@
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and
    limitations under the License.
-*/
-#include "etf.h"
-#include "tags.h"
-#include "term_entry.h"
+ */
+#pragma once
 
-#include <cmath>
-#include <iostream>
-#include <limits>
+#include "byteable.h"
+
+#include <string>
+
+namespace etfpp
+{
+  class String : public Byteable
+  {
+  public:
+    explicit String(std::string value) : mEntry(value) {}
+    ~String() {}
+    std::vector<std::uint8_t> Bytes(void) const override;
+  private:
+    static const std::size_t mMaxSize = 0xffff;
+    std::string mEntry;
+  };
+}

@@ -16,7 +16,7 @@
 #include "gtest/gtest.h"
 #include "gmock/gmock.h"
 
-#include "etfpp/term_entry.h"
+#include "etfpp/atom_utf8.h"
 
 TEST(encoder, atom_utf8_simple)
 {

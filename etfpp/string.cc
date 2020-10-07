@@ -13,10 +13,28 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 */
-#include "etf.h"
+#include "string.h"
 #include "tags.h"
-#include "term_entry.h"
+#include "utils.h"
 
-#include <cmath>
-#include <iostream>
-#include <limits>
+#include <stdexcept>
+
+namespace etfpp
+{
+  std::vector<std::uint8_t> String::Bytes(void) const
+  {
+    std::vector<std::uint8_t> ret = { tag::String };
+
+    // TODO: constructor probably should throw instead
+    if (mEntry.size() > mMaxSize)
+      throw std::runtime_error("can not encode strings larger than 65535 bytes");
+
+    const std::size_t size = mEntry.size();
+    BytesIntoVec(ret, size, 2);
+
+    std::copy(mEntry.begin(), mEntry.end(),
+              std::back_inserter(ret));
+
+    return ret;
+  }
+}

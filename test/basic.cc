@@ -18,7 +18,9 @@
 
 #include "etfpp/etf.h"
 #include "etfpp/term_entry.h"
+#include "etfpp/list.h"
 #include "etfpp/term.h"
+#include "etfpp/tuple.h"
 
 #include <sstream>
 

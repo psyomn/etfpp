@@ -13,10 +13,13 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 */
-#include "etf.h"
+#include "small_integer.h"
 #include "tags.h"
-#include "term_entry.h"
 
-#include <cmath>
-#include <iostream>
-#include <limits>
+namespace etfpp
+{
+  std::vector<std::uint8_t> SmallInteger::Bytes(void) const
+  {
+    return std::vector<std::uint8_t>({ tag::SmallInteger, mEntry });
+  }
+}

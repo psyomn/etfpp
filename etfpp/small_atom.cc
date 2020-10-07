@@ -13,10 +13,22 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 */
-#include "etf.h"
+#include "small_atom.h"
 #include "tags.h"
-#include "term_entry.h"
+#include "utils.h"
 
-#include <cmath>
-#include <iostream>
-#include <limits>
+namespace etfpp
+{
+  std::vector<std::uint8_t> SmallAtom::Bytes(void) const
+  {
+    // TODO check for max bounds here
+    std::vector<std::uint8_t> ret = { tag::SmallAtom };
+    const std::size_t size = mName.size();
+    BytesIntoVec(ret, size, 1);
+
+    for (const auto& b : mName)
+      ret.push_back(static_cast<std::uint8_t>(b));
+
+    return ret;
+  }
+}

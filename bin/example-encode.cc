@@ -14,7 +14,14 @@
    limitations under the License.
  */
 #include "etfpp/etf.h"
-#include "etfpp/term_entry.h"
+#include "etfpp/atom.h"
+#include "etfpp/atom_utf8.h"
+#include "etfpp/binary.h"
+#include "etfpp/bitbinary.h"
+#include "etfpp/list.h"
+#include "etfpp/tuple.h"
+#include "etfpp/float.h"
+#include "etfpp/integer.h"
 
 #include <iostream>
 #include <memory>

@@ -1,19 +1,41 @@
 cc_library(
     name = "etfpp",
     srcs = [
-         "etf.cc",
-         "term.cc",
-         "term_entry.cc",
-         "utils.cc"
+        "atom.cc",
+        "atom_utf8.cc",
+        "binary.cc",
+        "bitbinary.cc",
+        "etf.cc",
+        "float.cc",
+        "integer.cc",
+        "list.cc",
+        "small_atom.cc",
+        "small_integer.cc",
+        "string.cc",
+        "term.cc",
+        "term_entry.cc",
+        "tuple.cc",
+        "utils.cc",
     ],
 
     hdrs = [
-         "tags.h",
-
-         "etf.h",
-         "term.h",
-         "term_entry.h",
-         "utils.h"
+        "atom.h",
+        "atom_utf8.h",
+        "binary.h",
+        "bitbinary.h",
+        "byteable.h",
+        "etf.h",
+        "float.h",
+        "integer.h",
+        "list.h",
+        "small_atom.h",
+        "small_integer.h",
+        "string.h",
+        "tags.h",
+        "term_entry.h",
+        "term.h",
+        "tuple.h",
+        "utils.h",
     ],
 
     visibility = ["//visibility:public"]

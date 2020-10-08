@@ -16,6 +16,7 @@
 #include "etfpp/etf.h"
 #include "etfpp/atom.h"
 #include "etfpp/atom_utf8.h"
+#include "etfpp/small_atom_utf8.h"
 #include "etfpp/binary.h"
 #include "etfpp/bitbinary.h"
 #include "etfpp/list.h"
@@ -196,6 +197,31 @@ int main(void) {
 
     unique_ptr<etfpp::AtomUtf8> atom =
       std::make_unique<etfpp::AtomUtf8>(name);
+
+    etfpp::List list;
+    list.Add(std::move(atom));
+
+    std::stringstream ss;
+    etfpp::Encoder encoder(ss);
+    std::vector<std::uint8_t> bytes = encoder.Encode(list);
+
+    for (const auto& b : bytes) file << b;
+    file.close();
+  }
+
+  {
+    using std::unique_ptr;
+
+    std::ofstream file;
+    file.open(MakeNameFn(counter++), std::ios_base::binary);
+
+    const std::vector<std::uint8_t> name = {
+      0xce, 0x94, 0xce, 0xb9, 0xce, 0xbf, 0xce, 0xb3,
+      0xce, 0xad, 0xce, 0xbd, 0xce, 0xb7, 0xcf, 0x82
+    };
+
+    unique_ptr<etfpp::SmallAtomUtf8> atom =
+      std::make_unique<etfpp::SmallAtomUtf8>(name);
 
     etfpp::List list;
     list.Add(std::move(atom));

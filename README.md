@@ -31,7 +31,7 @@ A simple C++ library that helps you build and encode Erlang structures
 - [x] BitBinary
 - [ ] NewFloat
 - [x] AtomUtf8
-- [ ] SmallAtomUtf8
+- [x] SmallAtomUtf8
 
 ## building
 

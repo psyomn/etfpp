@@ -41,4 +41,26 @@ namespace etfpp {
     for (const auto& b: bytes) ss << b;
     return ss.str();
   }
+
+  std::uint64_t ReverseBytes(const std::uint64_t value, const std::size_t num)
+  {
+    if (num > 8) throw std::runtime_error("can't do more than 8 bytes");
+    const std::uint8_t bits = 8 * num;
+    std::uint64_t ret = 0;
+
+    for (std::size_t i = 0; i < bits; i += 8) {
+      const std::uint8_t byte = (value >> i) & 0xff;
+      ret = (ret << 8) | byte;
+    }
+
+    return ret;
+  }
+
+  std::uint64_t DoubleToBits(const double value)
+  {
+    union cvrt { double origin; std::uint64_t convert; };
+    union cvrt v = {0};
+    v.origin = value;
+    return v.convert;
+  }
 }

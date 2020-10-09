@@ -22,6 +22,7 @@
 #include "etfpp/list.h"
 #include "etfpp/tuple.h"
 #include "etfpp/float.h"
+#include "etfpp/new_float.h"
 #include "etfpp/integer.h"
 
 #include <iostream>
@@ -229,6 +230,22 @@ int main(void) {
     std::stringstream ss;
     etfpp::Encoder encoder(ss);
     std::vector<std::uint8_t> bytes = encoder.Encode(list);
+
+    for (const auto& b : bytes) file << b;
+    file.close();
+  }
+
+  { // [123.123] (but newfloat)
+    std::ofstream file;
+    file.open(MakeNameFn(counter++), std::ios_base::binary);
+
+    etfpp::List list;
+    std::unique_ptr<etfpp::Byteable> flt(new etfpp::NewFloat(123.123));
+    list.Add(std::move(flt));
+
+    std::stringstream ss;
+    etfpp::Encoder encoder(ss);
+    const std::vector<std::uint8_t> bytes = encoder.Encode(list);
 
     for (const auto& b : bytes) file << b;
     file.close();

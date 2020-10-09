@@ -105,3 +105,36 @@ TEST(utils, bytes_into_vec_8_bytes)
 
   EXPECT_THAT(actual, ::testing::ContainerEq(expected));
 }
+
+TEST(utils, double_to_bits)
+{
+  const double d = 123.0;
+  std::uint64_t bits = etfpp::DoubleToBits(d);
+  EXPECT_NE(std::uint64_t(d), bits);
+  EXPECT_EQ(bits, 0x405ec00000000000);
+}
+
+TEST(utils, reverse_bits_test)
+{
+  struct TestCase {
+    std::uint64_t value;
+    std::uint64_t numBytes;
+    std::uint64_t expected;
+  };
+
+  std::vector<TestCase> testCases = {
+    {0x11223344AABBCCDD, 1, 0xDD},
+    {0x11223344AABBCCDD, 2, 0xDDCC},
+    {0x11223344AABBCCDD, 3, 0xDDCCBB},
+    {0x11223344AABBCCDD, 4, 0xDDCCBBAA},
+    {0x11223344AABBCCDD, 5, 0xDDCCBBAA44},
+    {0x11223344AABBCCDD, 6, 0xDDCCBBAA4433},
+    {0x11223344AABBCCDD, 7, 0xDDCCBBAA443322},
+    {0x11223344AABBCCDD, 8, 0xDDCCBBAA44332211},
+  };
+
+  for (auto const& tc : testCases) {
+    const std::uint64_t ret = etfpp::ReverseBytes(tc.value, tc.numBytes);
+    EXPECT_EQ(ret, tc.expected);
+  }
+}

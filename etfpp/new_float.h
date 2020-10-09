@@ -13,17 +13,21 @@
    See the License for the specific language governing permissions and
    limitations under the License.
  */
-#pragma once
+#include "byteable.h"
 
-#include <cstddef>
 #include <cstdint>
-#include <string>
 #include <vector>
 
 namespace etfpp
 {
-  void BytesIntoVec(std::vector<std::uint8_t>& vec, const std::uint64_t value, const std::size_t num);
-  std::string BytesIntoString(const std::vector<uint8_t>& bytes);
-  __attribute__((pure)) std::uint64_t ReverseBytes(const std::uint64_t value, const std::size_t num);
-  __attribute__((pure)) std::uint64_t DoubleToBits(const double value);
+  class NewFloat : public Byteable
+  {
+  public:
+    // TODO: This might not be a portable solution, but it will do for
+    //   now.
+    explicit NewFloat(double value) : mEntry(value) {}
+    std::vector<std::uint8_t> Bytes(void) const override;
+  private:
+    double mEntry;
+  };
 }

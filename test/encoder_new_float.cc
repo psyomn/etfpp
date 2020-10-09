@@ -13,17 +13,19 @@
    See the License for the specific language governing permissions and
    limitations under the License.
  */
-#pragma once
+#include "gtest/gtest.h"
+#include "gmock/gmock.h"
 
-#include <cstddef>
-#include <cstdint>
-#include <string>
-#include <vector>
+#include "etfpp/new_float.h"
 
-namespace etfpp
+TEST(encoder, simple_new_float)
 {
-  void BytesIntoVec(std::vector<std::uint8_t>& vec, const std::uint64_t value, const std::size_t num);
-  std::string BytesIntoString(const std::vector<uint8_t>& bytes);
-  __attribute__((pure)) std::uint64_t ReverseBytes(const std::uint64_t value, const std::size_t num);
-  __attribute__((pure)) std::uint64_t DoubleToBits(const double value);
+  etfpp::NewFloat flt(123.123);
+  const std::vector<std::uint8_t> expected = {
+    0x46,
+    0x40, 0x5E, 0xC7, 0xDF,
+    0x3B, 0x64, 0x5A, 0x1D,
+  };
+  auto actual = flt.Bytes();
+  ASSERT_THAT(actual, ::testing::ContainerEq(expected));
 }

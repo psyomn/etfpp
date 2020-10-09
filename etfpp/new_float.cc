@@ -13,17 +13,23 @@
    See the License for the specific language governing permissions and
    limitations under the License.
  */
-#pragma once
+#include "new_float.h"
+#include "utils.h"
+#include "tags.h"
 
-#include <cstddef>
-#include <cstdint>
-#include <string>
-#include <vector>
+#include <stdexcept>
 
 namespace etfpp
 {
-  void BytesIntoVec(std::vector<std::uint8_t>& vec, const std::uint64_t value, const std::size_t num);
-  std::string BytesIntoString(const std::vector<uint8_t>& bytes);
-  __attribute__((pure)) std::uint64_t ReverseBytes(const std::uint64_t value, const std::size_t num);
-  __attribute__((pure)) std::uint64_t DoubleToBits(const double value);
+  std::vector<std::uint8_t> NewFloat::Bytes(void) const
+  {
+    static_assert(sizeof(double) == 8,
+                  "double should be of 8 bytes");
+
+    const std::uint64_t bits = DoubleToBits(mEntry);
+    std::vector<std::uint8_t> ret = { tag::NewFloat };
+    BytesIntoVec(ret, bits, 8);
+
+    return ret;
+  }
 }

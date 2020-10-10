@@ -16,7 +16,7 @@ A simple C++ library that helps you build and encode Erlang structures
 - [ ] Pid
 - [x] SmallTuple
 - [x] LargeTuple
-- [ ] Map
+- [x] Map
 - [x] Nil
 - [x] String
 - [x] List

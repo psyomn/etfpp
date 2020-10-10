@@ -20,6 +20,7 @@
 #include "etfpp/binary.h"
 #include "etfpp/bitbinary.h"
 #include "etfpp/list.h"
+#include "etfpp/map.h"
 #include "etfpp/tuple.h"
 #include "etfpp/float.h"
 #include "etfpp/new_float.h"
@@ -242,6 +243,27 @@ int main(void) {
     etfpp::List list;
     std::unique_ptr<etfpp::Byteable> flt(new etfpp::NewFloat(123.123));
     list.Add(std::move(flt));
+
+    std::stringstream ss;
+    etfpp::Encoder encoder(ss);
+    const std::vector<std::uint8_t> bytes = encoder.Encode(list);
+
+    for (const auto& b : bytes) file << b;
+    file.close();
+  }
+
+  { // #{1 => 2}
+    std::ofstream file;
+    file.open(MakeNameFn(counter++), std::ios_base::binary);
+
+    etfpp::List list;
+    std::unique_ptr<etfpp::Map> map = std::make_unique<etfpp::Map>();
+    std::unique_ptr<etfpp::Integer>
+      one = std::make_unique<etfpp::Integer>(1),
+      two = std::make_unique<etfpp::Integer>(2);
+
+    map->Add(std::move(one), std::move(two));
+    list.Add(std::move(map));
 
     std::stringstream ss;
     etfpp::Encoder encoder(ss);

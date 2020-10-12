@@ -63,4 +63,18 @@ namespace etfpp {
     v.origin = value;
     return v.convert;
   }
+
+  void ThrowIfNonNumeric(const std::string& str)
+  {
+    const std::string JustNumbers = "1234567890";
+    auto ok = str.find_first_not_of(JustNumbers, std::string::npos);
+    if (ok != std::string::npos) throw std::runtime_error("illegal character in passed bigint: " + str);
+  }
+
+  std::vector<std::uint8_t> StringIntToByteInt(const std::string& str)
+  {
+    std::vector<std::uint8_t> ret;
+    for (const auto& c : str) ret.push_back(std::uint8_t(c - 0x30));
+    return ret;
+  }
 }

@@ -29,7 +29,7 @@ build --cxxopt='-Wno-strict-aliasing'
 build --cxxopt='-Wno-format-nonliteral'
 build --cxxopt='-Wno-missing-field-initializers'
 build --cxxopt='-pipe'
-build --cxxopt='-g'
 build --cxxopt='-O3'
 build --cxxopt='-Werror'
 build --cxxopt='-march=native'
+build --strip=never

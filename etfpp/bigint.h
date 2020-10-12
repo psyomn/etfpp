@@ -12,20 +12,30 @@
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and
    limitations under the License.
- */
+*/
 #pragma once
 
-#include <cstddef>
 #include <cstdint>
 #include <string>
 #include <vector>
 
 namespace etfpp
 {
-  void BytesIntoVec(std::vector<std::uint8_t>& vec, const std::uint64_t value, const std::size_t num);
-  std::string BytesIntoString(const std::vector<uint8_t>& bytes);
-  void ThrowIfNonNumeric(const std::string& str);
-  std::vector<std::uint8_t> StringIntToByteInt(const std::string& str);
-  __attribute__((pure)) std::uint64_t ReverseBytes(const std::uint64_t value, const std::size_t num);
-  __attribute__((pure)) std::uint64_t DoubleToBits(const double value);
+  /**
+   * This is a pretty poor implementation but should do the trick for
+   * now. If this library ever becomes remotely useful this could be a
+   * good point for optimization (though it may not be worth it).
+   */
+  class BigInt
+  {
+  public:
+    explicit BigInt(std::string stringifiedInt);
+
+    void Add(const std::string& num);
+    std::string Get() const;
+
+    std::vector<std::uint8_t> ToLittleEndianVector() const;
+  private:
+    std::string mValue;
+  };
 }

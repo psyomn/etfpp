@@ -138,3 +138,11 @@ TEST(utils, reverse_bits_test)
     EXPECT_EQ(ret, tc.expected);
   }
 }
+
+TEST(utils, string_int_to_byte_int)
+{
+  const std::string input = "1234";
+  std::vector<std::uint8_t> actual = etfpp::StringIntToByteInt(input);
+  const std::vector<std::uint8_t> expected = { 1, 2, 3, 4 };
+  ASSERT_THAT(actual, ::testing::ContainerEq(expected));
+}

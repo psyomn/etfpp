@@ -3,6 +3,7 @@ cc_library(
     srcs = [
         "atom.cc",
         "atom_utf8.cc",
+        "bigint.cc",
         "binary.cc",
         "bitbinary.cc",
         "etf.cc",
@@ -24,6 +25,7 @@ cc_library(
     hdrs = [
         "atom.h",
         "atom_utf8.h",
+        "bigint.h",
         "binary.h",
         "bitbinary.h",
         "byteable.h",

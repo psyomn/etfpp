@@ -25,6 +25,10 @@ namespace etfpp
    * This is a pretty poor implementation but should do the trick for
    * now. If this library ever becomes remotely useful this could be a
    * good point for optimization (though it may not be worth it).
+   *
+   * This does not support sustractions below zero either. Again, this
+   * is specialized for this project, and may or may not come back to
+   * patch it to something better in the future.
    */
   class BigInt
   {

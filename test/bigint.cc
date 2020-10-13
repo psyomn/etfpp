@@ -108,6 +108,21 @@ TEST(bigint_add, add_111_to_222)
   ASSERT_EQ(bi.Get(), "333");
 }
 
+TEST(bigint_add, add_big_number)
+{
+  {
+    etfpp::BigInt bi("");
+    bi.Add("5000000000000000000000");
+    ASSERT_EQ(bi.Get(), "10000000000000000005000000000000000000000");
+  }
+
+  {
+    etfpp::BigInt bi("190000000000000000000000000000000000000000000");
+    bi.Add("10000000000000000000000000000000000000000000");
+    ASSERT_EQ(bi.Get(), "200000000000000000000000000000000000000000000");
+  }
+}
+
 TEST(bigint_sub, simple_subs)
 {
   struct TestCase {

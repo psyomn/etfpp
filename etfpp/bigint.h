@@ -32,10 +32,14 @@ namespace etfpp
     explicit BigInt(std::string stringifiedInt);
 
     void Add(const std::string& num);
+    void Sub(const std::string& num);
+    inline bool GetSign() const { return mSign == Sign::positive; }
     std::string Get() const;
 
     std::vector<std::uint8_t> ToLittleEndianVector() const;
   private:
+    enum class Sign { positive, negative };
     std::string mValue;
+    Sign mSign;
   };
 }

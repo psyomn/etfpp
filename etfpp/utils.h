@@ -24,8 +24,9 @@ namespace etfpp
 {
   void BytesIntoVec(std::vector<std::uint8_t>& vec, const std::uint64_t value, const std::size_t num);
   std::string BytesIntoString(const std::vector<uint8_t>& bytes);
-  void ThrowIfNonNumeric(const std::string& str);
-  std::vector<std::uint8_t> StringIntToByteInt(const std::string& str);
-  __attribute__((pure)) std::uint64_t ReverseBytes(const std::uint64_t value, const std::size_t num);
   __attribute__((pure)) std::uint64_t DoubleToBits(const double value);
+  __attribute__((pure)) std::uint64_t ReverseBytes(const std::uint64_t value, const std::size_t num);
+  std::vector<std::uint8_t> StringIntToByteInt(const std::string& str);
+  void ThrowIfNonNumeric(const std::string& str);
+  void TrimLeftChar(std::string& str, const char c);
 }

@@ -15,8 +15,11 @@
  */
 #include "utils.h"
 
+#include <algorithm>
 #include <sstream>
 #include <stdexcept>
+
+#include <iostream> // TODO REMOVE
 
 namespace etfpp {
   void BytesIntoVec(std::vector<std::uint8_t>& vec, const std::uint64_t value, const std::size_t num)
@@ -76,5 +79,10 @@ namespace etfpp {
     std::vector<std::uint8_t> ret;
     for (const auto& c : str) ret.push_back(std::uint8_t(c - 0x30));
     return ret;
+  }
+
+  void TrimLeftChar(std::string& str, const char c)
+  {
+    str.erase(std::remove(str.begin(), str.end(), c), str.end());
   }
 }

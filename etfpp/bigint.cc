@@ -24,7 +24,7 @@ namespace etfpp
 
   // TODO: should constructor throw on non numeric string?
   BigInt::BigInt(std::string stringifiedInt) :
-    mValue(stringifiedInt) {}
+    mValue(stringifiedInt), mSign(Sign::positive) {}
 
   void BigInt::Add(const std::string& num)
   {
@@ -84,6 +84,54 @@ namespace etfpp
     mValue = bigger;
   }
 
+  void BigInt::Sub(const std::string& num)
+  {
+    ThrowIfNonNumeric(num);
+
+    std::uint8_t carry = 0;
+    std::size_t cursor = mValue.size() - 1;
+    std::size_t subCursor = num.size() - 1;
+
+    while (true) {
+      int current =
+        int(mValue[cursor] - 0x30) -
+        int(num[subCursor] - 0x30);
+
+      if (current < 0) {
+        carry = 1;
+        current += 10;
+      }
+
+      mValue[cursor] = static_cast<char>(current + 0x30);
+
+      if (cursor == 0) break;
+      if (subCursor == 0) break;
+      --cursor;
+      --subCursor;
+    }
+
+    while (carry && cursor) {
+      --cursor;
+
+      carry = 0;
+      int current = int(mValue[cursor] - 0x30) - 1;
+
+      if (current < 0) {
+        carry = 1;
+        current += 10;
+      }
+
+      mValue[cursor] = static_cast<char>(current + 0x30);
+    }
+
+    while (carry && subCursor) {
+    }
+
+    TrimLeftChar(mValue, '0');
+
+    if (mValue == "") mValue = "0";
+  }
+
   std::string BigInt::Get() const
   {
     return mValue;
@@ -100,11 +148,6 @@ namespace etfpp
       std::size_t cursor = 0;
       std::uint8_t carry = 0;
 
-      // for (const auto& c : ret)
-      //   std::cout << std::hex << int(c) << " ";
-      // std::cout << std::endl;
-
-      // 01 00 00 00 00
       do {
         if (cursor > ret.size() - 1)
           ret.push_back(0);

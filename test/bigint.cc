@@ -3,7 +3,21 @@
 
 #include "etfpp/bigint.h"
 
-TEST(bigint, add_one_to_zero)
+TEST(bigint, init_sign)
+{
+  const etfpp::BigInt bi("1");
+  ASSERT_EQ(bi.GetSign(), true);
+}
+
+TEST(bigint, initialize_with_string_value)
+{
+  const std::string expected = "112312312312323123123123123123123123123123123";
+  const etfpp::BigInt bi(expected);
+
+  ASSERT_EQ(bi.Get(), expected);
+}
+
+TEST(bigint_add, add_one_to_zero)
 {
   const std::string
     expected = "1",
@@ -16,15 +30,7 @@ TEST(bigint, add_one_to_zero)
   ASSERT_EQ(bi.Get(), expected);
 }
 
-TEST(bigint, initialize_with_string_value)
-{
-  const std::string expected = "112312312312323123123123123123123123123123123";
-  const etfpp::BigInt bi(expected);
-
-  ASSERT_EQ(bi.Get(), expected);
-}
-
-TEST(bigint, one_and_one)
+TEST(bigint_add, one_and_one)
 {
   const std::string one = "1";
   etfpp::BigInt bi(one);
@@ -33,7 +39,7 @@ TEST(bigint, one_and_one)
   ASSERT_EQ(bi.Get(), "2");
 }
 
-TEST(bigint, simple_add)
+TEST(bigint_add, simple_add)
 {
   const std::string
     first = "123",
@@ -46,7 +52,7 @@ TEST(bigint, simple_add)
   ASSERT_EQ(bi.Get(), expect);
 }
 
-TEST(bigint, simple_add_carry)
+TEST(bigint_add, simple_add_carry)
 {
   const std::string
     first = "999",
@@ -59,7 +65,7 @@ TEST(bigint, simple_add_carry)
   ASSERT_EQ(bi.Get(), expect);
 }
 
-TEST(bigint, add_value_edge)
+TEST(bigint_add, add_value_edge)
 {
   const std::string
     first = "999999999999999999999999999999999999999999",
@@ -72,7 +78,7 @@ TEST(bigint, add_value_edge)
   ASSERT_EQ(bi.Get(), expect);
 }
 
-TEST(bigint, add_1_to_9)
+TEST(bigint_add, add_1_to_9)
 {
   const std::string
     first = "9",
@@ -85,36 +91,114 @@ TEST(bigint, add_1_to_9)
   ASSERT_EQ(bi.Get(), expect);
 }
 
-TEST(bigint, add_upto_N)
+TEST(bigint_add, add_upto_N)
 {
   etfpp::BigInt bi("0");
   const std::size_t N = 1000;
 
-  for (std::size_t i = 0; i < N; ++i) {
-    std::cout << i << std::endl;
-    bi.Add("1");
-  }
+  for (std::size_t i = 0; i < N; ++i) bi.Add("1");
 
   ASSERT_EQ(bi.Get(), "1000");
 }
 
-#include <iostream>
-#include <thread>
-#include <unistd.h>
-TEST(bigint, to_little_endian_vector)
+TEST(bigint_add, add_111_to_222)
 {
-  const std::string input = "18446744073709551616"; // 2 ^ 64 + 1
-  const std::vector<std::uint8_t> expected = {
-    0x00, 0x00, 0x00, 0x00,
-    0x00, 0x00, 0x00, 0x00,
-    0x01,
+  etfpp::BigInt bi("111");
+  bi.Add("222");
+  ASSERT_EQ(bi.Get(), "333");
+}
+
+TEST(bigint_sub, simple_subs)
+{
+  struct TestCase {
+    std::string init;
+    std::string toSub;
+    std::string expected;
   };
 
-  etfpp::BigInt bi(input);
-  const auto lev = bi.ToLittleEndianVector();
+  const std::vector<TestCase> tcs = {
+    {"5", "1", "4"},
+    {"15", "1", "14"},
+    {"115", "1", "114"},
+  };
 
-  ASSERT_THAT(lev, ::testing::ContainerEq(expected));
+  for (const auto& tc : tcs) {
+    etfpp::BigInt bi(tc.init);
+    bi.Sub(tc.toSub);
+    ASSERT_THAT(bi.Get(), tc.expected);
+  }
 }
+
+TEST(bigint_sub, evoke_carry)
+{
+  struct TestCase {
+    std::string init;
+    std::string toSub;
+    std::string expect;
+  };
+
+  const std::vector<TestCase> tcs = {
+    {"10", "1", "9"},
+    {"20", "1", "19"},
+    {"30", "1", "29"},
+    {"100", "1", "99"},
+    {"1000", "1", "999"},
+  };
+
+  for (const auto& tc : tcs) {
+    etfpp::BigInt bi(tc.init);
+    bi.Sub(tc.toSub);
+    ASSERT_THAT(bi.Get(), tc.expect);
+  }
+}
+
+TEST(bigint_sub, remove_eq)
+{
+  etfpp::BigInt bi("123");
+  bi.Sub("123");
+  ASSERT_THAT(bi.Get(), "0");
+}
+
+TEST(bigint_sub, sub_3_from_1)
+{
+  const std::string
+    input = "1",
+    toSub = "3",
+    expected = "-2";
+
+  etfpp::BigInt bi(input);
+  bi.Sub(toSub);
+
+  ASSERT_THAT(bi.Get(), expected);
+}
+
+TEST(bigint_sub, sub_300_from_1)
+{
+  const std::string
+    input = "1",
+    toSub = "300",
+    expected = "-299";
+
+  etfpp::BigInt bi(input);
+  bi.Sub(toSub);
+
+  ASSERT_THAT(bi.Get(), expected);
+}
+
+// TEST(bigint, to_little_endian_vector)
+// {
+//   const std::string input = "18446744073709551616"; // 2 ^ 64 + 1
+//   const std::vector<std::uint8_t> expected = {
+//     0x00, 0x00, 0x00, 0x00,
+//     0x00, 0x00, 0x00, 0x00,
+//     0x01,
+//   };
+//
+//   etfpp::BigInt bi(input);
+//   const auto lev = bi.ToLittleEndianVector();
+//
+//   ASSERT_THAT(lev, ::testing::ContainerEq(expected));
+// }
 
 // TODO: test bigint("")
 // TODO: test bigint("abc")

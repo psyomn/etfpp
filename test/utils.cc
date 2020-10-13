@@ -146,3 +146,24 @@ TEST(utils, string_int_to_byte_int)
   const std::vector<std::uint8_t> expected = { 1, 2, 3, 4 };
   ASSERT_THAT(actual, ::testing::ContainerEq(expected));
 }
+
+TEST(utils, trim_left_char)
+{
+  struct TestCase {
+    std::string input;
+    std::string expected;
+  };
+
+  std::vector<TestCase> tcs = {
+    {"01", "1"},
+    {"001", "1"},
+    {"0001", "1"},
+    {"00001", "1"},
+    {"000001", "1"},
+  };
+
+  for (auto& e : tcs) {
+    etfpp::TrimLeftChar(e.input, '0');
+    ASSERT_THAT(e.input, e.expected);
+  }
+}

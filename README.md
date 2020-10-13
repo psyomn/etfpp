@@ -6,14 +6,10 @@ A simple C++ library that helps you build and encode Erlang structures
 ## support
 
 - [x] Version
-- [ ] AtomCacheRef
 - [x] SmallInteger
 - [x] Integer
 - [x] Float
 - [x] Atom
-- [ ] Reference
-- [ ] Port
-- [ ] Pid
 - [x] SmallTuple
 - [x] LargeTuple
 - [x] Map
@@ -23,15 +19,25 @@ A simple C++ library that helps you build and encode Erlang structures
 - [x] Binary
 - [ ] SmallBig
 - [ ] LargeBig
-- [ ] NewReference
 - [x] SmallAtom
-- [ ] Fun
-- [ ] NewFun
-- [ ] Export
 - [x] BitBinary
 - [x] NewFloat
 - [x] AtomUtf8
 - [x] SmallAtomUtf8
+
+## probably will not support
+
+Not sure I really want to support these for what I'm doing right now,
+but maybe in the future.
+
+- [ ] AtomCacheRef
+- [ ] Fun
+- [ ] NewFun
+- [ ] Export
+- [ ] NewReference
+- [ ] Reference
+- [ ] Port
+- [ ] Pid
 
 ## building
 

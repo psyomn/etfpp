@@ -160,10 +160,14 @@ TEST(utils, trim_left_char)
     {"0001", "1"},
     {"00001", "1"},
     {"000001", "1"},
+
+    {"100", "100"},
+    {"1000", "1000"},
+    {"1000000", "1000000"},
   };
 
   for (auto& e : tcs) {
     etfpp::TrimLeftChar(e.input, '0');
-    ASSERT_THAT(e.input, e.expected);
+    EXPECT_EQ(e.input, e.expected);
   }
 }

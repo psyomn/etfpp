@@ -159,46 +159,60 @@ TEST(bigint_sub, remove_eq)
   ASSERT_THAT(bi.Get(), "0");
 }
 
-TEST(bigint_sub, sub_3_from_1)
+TEST(bigint_sub, sub_many)
 {
-  const std::string
-    input = "1",
-    toSub = "3",
-    expected = "-2";
+  etfpp::BigInt bi("1000");
 
-  etfpp::BigInt bi(input);
-  bi.Sub(toSub);
+  ASSERT_THAT(bi.Get(), "1000");
 
-  ASSERT_THAT(bi.Get(), expected);
+  bi.Sub("250");
+  ASSERT_THAT(bi.Get(), "750");
+
+  bi.Sub("250");
+  ASSERT_THAT(bi.Get(), "500");
+
+  bi.Sub("250");
+  ASSERT_THAT(bi.Get(), "250");
+
+  bi.Sub("250");
+  ASSERT_THAT(bi.Get(), "0");
 }
 
-TEST(bigint_sub, sub_300_from_1)
+TEST(bigint, remove_bigger_value)
 {
-  const std::string
-    input = "1",
-    toSub = "300",
-    expected = "-299";
+  {
+    etfpp::BigInt bi("18446744073709551616");
+    bi.Sub("18446744073709551615");
+    ASSERT_THAT(bi.Get(), "1");
+  }
 
-  etfpp::BigInt bi(input);
-  bi.Sub(toSub);
+  {
+    etfpp::BigInt bi("18446744073709551616");
+    bi.Sub("18446744073709551616");
+    ASSERT_THAT(bi.Get(), "0");
+  }
 
-  ASSERT_THAT(bi.Get(), expected);
+  {
+    etfpp::BigInt bi("10000000000000000000000000000000000000000000000000000000000000000");
+    bi.Sub("1");
+    ASSERT_THAT(bi.Get(), "9999999999999999999999999999999999999999999999999999999999999999");
+  }
 }
 
-// TEST(bigint, to_little_endian_vector)
-// {
-//   const std::string input = "18446744073709551616"; // 2 ^ 64 + 1
-//   const std::vector<std::uint8_t> expected = {
-//     0x00, 0x00, 0x00, 0x00,
-//     0x00, 0x00, 0x00, 0x00,
-//     0x01,
-//   };
-//
-//   etfpp::BigInt bi(input);
-//   const auto lev = bi.ToLittleEndianVector();
-//
-//   ASSERT_THAT(lev, ::testing::ContainerEq(expected));
-// }
+TEST(bigint, to_little_endian_vector)
+{
+  const std::string input = "18446744073709551616"; // 2 ^ 64 + 1
+  const std::vector<std::uint8_t> expected = {
+    0x00, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00, 0x00,
+    0x01,
+  };
+
+  etfpp::BigInt bi(input);
+  const auto lev = bi.ToLittleEndianVector();
+
+  ASSERT_THAT(lev, ::testing::ContainerEq(expected));
+}
 
 // TODO: test bigint("")
 // TODO: test bigint("abc")

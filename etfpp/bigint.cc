@@ -95,7 +95,9 @@ namespace etfpp
     while (true) {
       int current =
         int(mValue[cursor] - 0x30) -
-        int(num[subCursor] - 0x30);
+        int(num[subCursor] - 0x30) - carry;
+
+      carry = 0;
 
       if (current < 0) {
         carry = 1;
@@ -140,30 +142,6 @@ namespace etfpp
   std::vector<std::uint8_t> BigInt::ToLittleEndianVector() const
   {
     std::vector<std::uint8_t> ret = { 0x00 };
-    BigInt bi("0");
-
-    while (bi.Get() != Get()) {
-      bi.Add("1");
-
-      std::size_t cursor = 0;
-      std::uint8_t carry = 0;
-
-      do {
-        if (cursor > ret.size() - 1)
-          ret.push_back(0);
-
-        if (ret[cursor] == 0xff) {
-          ret[cursor] = 0;
-          carry = 1;
-        } else {
-          ret[cursor]++;
-          carry = 0;
-        }
-
-        ++cursor;
-      } while (carry);
-    }
-
     return ret;
   }
 }

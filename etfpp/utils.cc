@@ -16,6 +16,7 @@
 #include "utils.h"
 
 #include <algorithm>
+#include <regex>
 #include <sstream>
 #include <stdexcept>
 
@@ -83,6 +84,6 @@ namespace etfpp {
 
   void TrimLeftChar(std::string& str, const char c)
   {
-    str.erase(std::remove(str.begin(), str.end(), c), str.end());
+    str = std::regex_replace(str, std::regex("^0+"), "");
   }
 }

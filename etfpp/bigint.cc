@@ -126,8 +126,9 @@ namespace etfpp
       mValue[cursor] = static_cast<char>(current + 0x30);
     }
 
-    while (carry && subCursor) {
-    }
+    // This would make sense if we were handling negative numbers but
+    // we're not.
+    // while (carry && subCursor) {}
 
     TrimLeftChar(mValue, '0');
 
@@ -143,5 +144,72 @@ namespace etfpp
   {
     std::vector<std::uint8_t> ret = { 0x00 };
     return ret;
+  }
+
+  bool operator== (const BigInt& bi1, const BigInt& bi2)
+  {
+    const std::string s1 = bi1.Get();
+    const std::string s2 = bi2.Get();
+    const std::size_t sz1 = s1.size();
+    const std::size_t sz2 = s2.size();
+
+    if (sz1 != sz2) return false;
+
+    const std::size_t size = s1.size();
+    for (std::size_t i = 0; i < size; ++i)
+      if (s1[i] != s2[i]) return false;
+
+    return true;
+  }
+
+  bool operator!= (const BigInt& bi1, const BigInt& bi2)
+  {
+    return !(bi1 == bi2);
+  }
+
+  bool operator<  (const BigInt& bi1, const BigInt& bi2)
+  {
+    const std::string s1 = bi1.Get();
+    const std::string s2 = bi2.Get();
+    const std::size_t sz1 = s1.size();
+    const std::size_t sz2 = s2.size();
+
+    if (sz1 < sz2) return true;
+    if (sz1 > sz2) return false;
+
+    for (std::size_t i = 0; i < sz1; ++i) {
+      if (s1[i] > s2[i]) return false;
+      if (s1[i] < s2[i]) return true;
+    }
+
+    return false;
+  }
+
+  bool operator>  (const BigInt& bi1, const BigInt& bi2)
+  {
+    const std::string s1 = bi1.Get();
+    const std::string s2 = bi2.Get();
+    const std::size_t sz1 = s1.size();
+    const std::size_t sz2 = s2.size();
+
+    if (sz1 > sz2) return true;
+    if (sz1 < sz2) return false;
+
+    for (std::size_t i = 0; i < sz1; ++i) {
+      if (s1[i] > s2[i]) return true;
+      if (s1[i] < s2[i]) return false;
+    }
+
+    return false;
+  }
+
+  bool operator<= (const BigInt& bi1, const BigInt& bi2)
+  {
+    return !(bi1 > bi2);
+  }
+
+  bool operator>= (const BigInt& bi1, const BigInt& bi2)
+  {
+    return !(bi1 < bi2);
   }
 }

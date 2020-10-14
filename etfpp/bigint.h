@@ -41,6 +41,14 @@ namespace etfpp
     std::string Get() const;
 
     std::vector<std::uint8_t> ToLittleEndianVector() const;
+
+    friend bool operator== (const BigInt& bi1, const BigInt& bi2);
+    friend bool operator!= (const BigInt& bi1, const BigInt& bi2);
+    friend bool operator<  (const BigInt& bi1, const BigInt& bi2);
+    friend bool operator>  (const BigInt& bi1, const BigInt& bi2);
+    friend bool operator<= (const BigInt& bi1, const BigInt& bi2);
+    friend bool operator>= (const BigInt& bi1, const BigInt& bi2);
+
   private:
     enum class Sign { positive, negative };
     std::string mValue;

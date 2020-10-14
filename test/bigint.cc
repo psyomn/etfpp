@@ -111,7 +111,7 @@ TEST(bigint_add, add_111_to_222)
 TEST(bigint_add, add_big_number)
 {
   {
-    etfpp::BigInt bi("");
+    etfpp::BigInt bi("10000000000000000000000000000000000000000");
     bi.Add("5000000000000000000000");
     ASSERT_EQ(bi.Get(), "10000000000000000005000000000000000000000");
   }
@@ -214,21 +214,113 @@ TEST(bigint, remove_bigger_value)
   }
 }
 
-TEST(bigint, to_little_endian_vector)
+TEST(bigint_operator, test_eq)
 {
-  const std::string input = "18446744073709551616"; // 2 ^ 64 + 1
-  const std::vector<std::uint8_t> expected = {
-    0x00, 0x00, 0x00, 0x00,
-    0x00, 0x00, 0x00, 0x00,
-    0x01,
-  };
-
-  etfpp::BigInt bi(input);
-  const auto lev = bi.ToLittleEndianVector();
-
-  ASSERT_THAT(lev, ::testing::ContainerEq(expected));
+  const etfpp::BigInt bi1("123123123123123123123123123123123123123123123123123");
+  const etfpp::BigInt bi2("123123123123123123123123123123123123123123123123123");
+  const etfpp::BigInt bi3("123");
+  EXPECT_THAT(bi1 == bi2, true);
+  EXPECT_THAT(bi1 == bi3, false);
 }
 
+TEST(bigint_operator, test_neq)
+{
+  const etfpp::BigInt bi1("123123123123123123123123123123123123123123123123123");
+  const etfpp::BigInt bi2("123123123123123123123123123123123123123123123123123");
+  const etfpp::BigInt bi3("123");
+  EXPECT_THAT(bi1 != bi2, false);
+  EXPECT_THAT(bi1 != bi3, true);
+}
+
+TEST(bigint_operator, test_lt)
+{
+  const etfpp::BigInt bi1("123123123123123123123123123123123123123123123123123");
+  const etfpp::BigInt bi2("123123123123123123123123123123123123123123123123123");
+  const etfpp::BigInt bi3("123");
+  const etfpp::BigInt bi4("123123123123123123123123123123123123123123123123124");
+  const etfpp::BigInt bi5("123123123123123123123123123444444123123123123123123");
+  const etfpp::BigInt zero("0");
+  const etfpp::BigInt one("1");
+
+  EXPECT_THAT(bi1 < bi1, false);
+
+  EXPECT_THAT(bi1 < bi2, false);
+  EXPECT_THAT(bi1 < bi3, false);
+  EXPECT_THAT(bi3 < bi1, true);
+  EXPECT_THAT(bi1 < bi4, true);
+
+  EXPECT_THAT(bi1 < bi5, true);
+  EXPECT_THAT(bi5 < bi1, false);
+
+  EXPECT_THAT(zero < one, true);
+  EXPECT_THAT(one < zero, false);
+
+  EXPECT_THAT(etfpp::BigInt("99") <
+              etfpp::BigInt("100"), true);
+}
+
+TEST(bigint_operator, test_gt)
+{
+  const etfpp::BigInt bi1("123123123123123123123123123123123123123123123123123");
+  const etfpp::BigInt bi2("123123123123123123123123123123123123123123123123123");
+  const etfpp::BigInt bi3("123");
+  const etfpp::BigInt bi4("123123123123123123123123123123123123123123123123124");
+  const etfpp::BigInt bi5("123123123123123123123123123444444123123123123123123");
+  const etfpp::BigInt zero("0");
+  const etfpp::BigInt one("1");
+
+  EXPECT_THAT(bi1 > bi2, false);
+  EXPECT_THAT(bi2 > bi1, false);
+  EXPECT_THAT(bi1 > bi3, true);
+  EXPECT_THAT(bi3 > bi1, false);
+  EXPECT_THAT(bi1 > bi4, false);
+  EXPECT_THAT(bi4 > bi1, true);
+  EXPECT_THAT(bi5 > bi1, true);
+  EXPECT_THAT(bi1 > bi5, false);
+
+  EXPECT_THAT(zero > one, false);
+  EXPECT_THAT(one > zero, true);
+
+  EXPECT_THAT(etfpp::BigInt("99") >
+              etfpp::BigInt("100"), false);
+}
+
+TEST(bigint_operator, test_geq)
+{
+  const etfpp::BigInt bi1("100");
+  const etfpp::BigInt bi2("100");
+  const etfpp::BigInt bi3("101");
+  EXPECT_THAT(bi1 >= bi3, false);
+  EXPECT_THAT(bi1 >= bi2, true);
+  EXPECT_THAT(bi3 >= bi1, true);
+}
+
+TEST(bigint_operator, test_leq)
+{
+  const etfpp::BigInt bi1("100");
+  const etfpp::BigInt bi2("100");
+  const etfpp::BigInt bi3("99");
+  EXPECT_THAT(bi1 <= bi3, false);
+  EXPECT_THAT(bi1 <= bi2, true);
+  EXPECT_THAT(bi3 <= bi1, true);
+}
+
+// TEST(bigint, to_little_endian_vector)
+// {
+//   const std::string input = "18446744073709551616"; // 2 ^ 64 + 1
+//   const std::vector<std::uint8_t> expected = {
+//     0x00, 0x00, 0x00, 0x00,
+//     0x00, 0x00, 0x00, 0x00,
+//     0x01,
+//   };
+//
+//   etfpp::BigInt bi(input);
+//   const auto lev = bi.ToLittleEndianVector();
+//
+//   EXPECT_THAT(lev, ::testing::ContainerEq(expected));
+// }
+
+// TODO: test bigint("000000000000000000")
 // TODO: test bigint("")
 // TODO: test bigint("abc")
 // TODO: test bigint("123abc123")

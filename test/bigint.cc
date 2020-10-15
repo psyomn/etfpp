@@ -305,20 +305,63 @@ TEST(bigint_operator, test_leq)
   EXPECT_THAT(bi3 <= bi1, true);
 }
 
-// TEST(bigint, to_little_endian_vector)
-// {
-//   const std::string input = "18446744073709551616"; // 2 ^ 64 + 1
-//   const std::vector<std::uint8_t> expected = {
-//     0x00, 0x00, 0x00, 0x00,
-//     0x00, 0x00, 0x00, 0x00,
-//     0x01,
-//   };
-//
-//   etfpp::BigInt bi(input);
-//   const auto lev = bi.ToLittleEndianVector();
-//
-//   EXPECT_THAT(lev, ::testing::ContainerEq(expected));
-// }
+TEST(bigint, to_little_endian_vector)
+{
+  {
+    const std::string input = "18446744073709551616"; // 2 ^ 64 + 1
+    const std::vector<std::uint8_t> expected = {
+      0x00, 0x00, 0x00, 0x00,
+      0x00, 0x00, 0x00, 0x00,
+      0x01,
+    };
+
+    const etfpp::BigInt bi(input);
+    const auto lev = bi.ToLittleEndianVector();
+
+    EXPECT_THAT(lev, ::testing::ContainerEq(expected));
+  }
+
+  {
+    const std::string input = "36893488147419103232"; // 2 x (2 ^ 64) + 1
+    const std::vector<std::uint8_t> expected = {
+      0x00, 0x00, 0x00, 0x00,
+      0x00, 0x00, 0x00, 0x00,
+      0x02,
+    };
+
+    const etfpp::BigInt bi(input);
+    const auto lev = bi.ToLittleEndianVector();
+
+    EXPECT_THAT(lev, ::testing::ContainerEq(expected));
+  }
+
+  {
+    const std::string input = "184467440737095516160"; // (2 ^ 64 + 1) * 10
+    const std::vector<std::uint8_t> expected = {
+      0x00, 0x00, 0x00, 0x00,
+      0x00, 0x00, 0x00, 0x00,
+      0x0a,
+    };
+
+    const etfpp::BigInt bi(input);
+    const auto lev = bi.ToLittleEndianVector();
+
+    EXPECT_THAT(lev, ::testing::ContainerEq(expected));
+  }
+
+  {
+    const std::string input = "4722366482869645213694";
+    const std::vector<std::uint8_t> expected = {
+      0xff, 0xff, 0xff, 0xff,
+      0xff, 0xff, 0xff, 0xff,
+      0xfe,
+    };
+
+    const etfpp::BigInt bi(input);
+    const auto lev = bi.ToLittleEndianVector();
+    EXPECT_THAT(lev, ::testing::ContainerEq(expected));
+  }
+}
 
 // TODO: test bigint("000000000000000000")
 // TODO: test bigint("")

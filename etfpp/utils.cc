@@ -20,8 +20,6 @@
 #include <sstream>
 #include <stdexcept>
 
-#include <iostream> // TODO REMOVE
-
 namespace etfpp {
   void BytesIntoVec(std::vector<std::uint8_t>& vec, const std::uint64_t value, const std::size_t num)
   {

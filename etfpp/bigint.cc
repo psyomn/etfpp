@@ -16,133 +16,24 @@
 #include "bigint.h"
 #include "utils.h"
 
+#include <array>
 #include <cstddef>
 #include <stdexcept>
 
 namespace etfpp
 {
-
   // TODO: should constructor throw on non numeric string?
   BigInt::BigInt(std::string stringifiedInt) :
     mValue(stringifiedInt), mSign(Sign::positive) {}
 
-  void BigInt::Add(const std::string& num)
-  {
-    ThrowIfNonNumeric(num);
-
-    std::string smaller = num.size() < mValue.size() ? num : mValue;
-    std::string bigger = num.size() >= mValue.size() ? num : mValue;
-
-    std::size_t bigCursor = bigger.size() - 1;
-    std::size_t smallCursor = smaller.size() - 1;
-
-    std::uint8_t carry = 0;
-
-    while (true) {
-      std::uint8_t current =
-        (bigger[bigCursor] - 0x30) + (smaller[smallCursor] - 0x30)
-        + carry;
-
-      carry = 0;
-
-      if (current >= 10) {
-        carry = 1;
-        current -= 10;
-      }
-
-      bigger[bigCursor] = static_cast<char>(current + 0x30);
-
-      if (smallCursor == 0)
-        break;
-
-      --smallCursor;
-      --bigCursor;
-    }
-
-    if (bigCursor == 0)  goto finish;
-
-    --bigCursor;
-    while (carry != 0) {
-      std::uint8_t current = bigger[bigCursor] - 0x30 + carry;
-      carry = 0;
-
-      if (current >= 10) {
-        carry = 1;
-        current -= 10;
-      }
-
-      bigger[bigCursor] = static_cast<char>(current + 0x30);
-
-      if (bigCursor == 0)
-        break;
-
-      --bigCursor;
-    }
-
-  finish:
-    if (carry) bigger = "1" + bigger;
-    mValue = bigger;
-  }
-
-  void BigInt::Sub(const std::string& num)
-  {
-    ThrowIfNonNumeric(num);
-
-    std::uint8_t carry = 0;
-    std::size_t cursor = mValue.size() - 1;
-    std::size_t subCursor = num.size() - 1;
-
-    while (true) {
-      int current =
-        int(mValue[cursor] - 0x30) -
-        int(num[subCursor] - 0x30) - carry;
-
-      carry = 0;
-
-      if (current < 0) {
-        carry = 1;
-        current += 10;
-      }
-
-      mValue[cursor] = static_cast<char>(current + 0x30);
-
-      if (cursor == 0) break;
-      if (subCursor == 0) break;
-      --cursor;
-      --subCursor;
-    }
-
-    while (carry && cursor) {
-      --cursor;
-
-      carry = 0;
-      int current = int(mValue[cursor] - 0x30) - 1;
-
-      if (current < 0) {
-        carry = 1;
-        current += 10;
-      }
-
-      mValue[cursor] = static_cast<char>(current + 0x30);
-    }
-
-    // This would make sense if we were handling negative numbers but
-    // we're not.
-    // while (carry && subCursor) {}
-
-    TrimLeftChar(mValue, '0');
-
-    if (mValue == "") mValue = "0";
-  }
-
-  std::string BigInt::Get() const
+  std::string BigInt::Get() const noexcept
   {
     return mValue;
   }
 
   std::vector<std::uint8_t> BigInt::ToLittleEndianVector() const
   {
-    std::vector<std::uint8_t> ret = { 0x00 };
+    std::vector<std::uint8_t> ret;
     return ret;
   }
 
@@ -150,16 +41,7 @@ namespace etfpp
   {
     const std::string s1 = bi1.Get();
     const std::string s2 = bi2.Get();
-    const std::size_t sz1 = s1.size();
-    const std::size_t sz2 = s2.size();
-
-    if (sz1 != sz2) return false;
-
-    const std::size_t size = s1.size();
-    for (std::size_t i = 0; i < size; ++i)
-      if (s1[i] != s2[i]) return false;
-
-    return true;
+    return s1 == s2;
   }
 
   bool operator!= (const BigInt& bi1, const BigInt& bi2)

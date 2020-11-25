@@ -34,11 +34,8 @@ namespace etfpp
   {
   public:
     explicit BigInt(std::string stringifiedInt);
-
-    void Add(const std::string& num);
-    void Sub(const std::string& num);
     inline bool GetSign() const { return mSign == Sign::positive; }
-    std::string Get() const;
+    std::string Get() const noexcept;
 
     std::vector<std::uint8_t> ToLittleEndianVector() const;
 

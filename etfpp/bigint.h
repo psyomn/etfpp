@@ -37,15 +37,6 @@ namespace etfpp
     inline bool GetSign() const { return mSign == Sign::positive; }
     std::string Get() const noexcept;
 
-    std::vector<std::uint8_t> ToLittleEndianVector() const;
-
-    friend bool operator== (const BigInt& bi1, const BigInt& bi2);
-    friend bool operator!= (const BigInt& bi1, const BigInt& bi2);
-    friend bool operator<  (const BigInt& bi1, const BigInt& bi2);
-    friend bool operator>  (const BigInt& bi1, const BigInt& bi2);
-    friend bool operator<= (const BigInt& bi1, const BigInt& bi2);
-    friend bool operator>= (const BigInt& bi1, const BigInt& bi2);
-
   private:
     enum class Sign { positive, negative };
     std::string mValue;
